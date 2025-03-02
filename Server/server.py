@@ -4,7 +4,7 @@ from geopy import Point  # For working with coordinates
 from flask_cors import CORS  # Import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all domains
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 class Location:
     def __init__(self, latitude, longitude):

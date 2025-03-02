@@ -19,7 +19,7 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
       // Fetch the center coordinates first to initialize the map
-      fetch("http://127.0.0.1:5000/get_center_coords?lobby_name=exampleLobby")
+      fetch("https://43ppk7jt-5000.use.devtunnels.ms/get_center_coords?lobby_name=Bob")
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
@@ -45,7 +45,7 @@
 
             // Now fetch the game state
             fetch(
-              "http://127.0.0.1:5000/get_game_state?lobby_name=exampleLobby",
+              "https://43ppk7jt-5000.use.devtunnels.ms/get_game_state?lobby_name=Bob",
               {
                 method: "GET",
               },

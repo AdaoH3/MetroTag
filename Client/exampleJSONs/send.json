@@ -1,24 +1,7 @@
 {
-	"people": [
-		{
-			"name": "Leo",
-			"latitude": "",
-			"longitude": ""
-		},
-		{
-			"name": "Leo",
-			"latitude": 42.3601,
-			"longitude": -71.0589
-		}
-	],
-	"locations": {
-		"Jeremy": {
-			"latitude": 42.3601,
-			"longitude": -71.0589
-		},
-		"Leo": {
-			"latitude": 42.3601,
-			"longitude": -71.0589
-		}
-	}
+	"is_tagged": false,
+	"latitude": 42.36036976933084,
+	"longitude": -71.08740010611395,
+	"role": "runner",
+	"user_name": "Leo"
 }

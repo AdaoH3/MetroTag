@@ -5,3 +5,4 @@
 expo-env.d.ts
 Client/node_modules
 Client/.vscode
+venv/

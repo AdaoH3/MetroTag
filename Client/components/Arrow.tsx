@@ -24,9 +24,10 @@ const Arrow: React.FC<ArrowProps> = ({ angleOffset = 0 }) => {
 				const { x, y } = data;
 				let newAngle = Math.atan2(y, x) * (180 / Math.PI);
 				newAngle = newAngle < 0 ? newAngle + 360 : newAngle;
-				newAngle = (newAngle + angleOffset) % 360;
-				setSmoothedAngle(
-					prevAngle => alpha * newAngle + (1 - alpha) * prevAngle
+
+				// Smooth transition and ensure absolute offset
+				setSmoothedAngle(prevAngle => 
+					alpha * newAngle + (1 - alpha) * prevAngle
 				);
 			});
 		};
@@ -36,14 +37,14 @@ const Arrow: React.FC<ArrowProps> = ({ angleOffset = 0 }) => {
 		return () => {
 			if (magSub) magSub.remove();
 		};
-	}, [angleOffset]);
+	}, []);
+
+	const absoluteAngle = (smoothedAngle + angleOffset) % 360;
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.text}>
-				Heading:{' '}
-				{Math.round((((360 - (90 - smoothedAngle)) % 360) + 360) % 360 + angleOffset)}
-				°
+				Heading: {Math.round(absoluteAngle)}°
 			</Text>
 			<Text style={styles.text}>
 				Relative to Runner: {Math.round(angleOffset)}°
@@ -54,7 +55,7 @@ const Arrow: React.FC<ArrowProps> = ({ angleOffset = 0 }) => {
 					height="100"
 					viewBox="0 0 100 100"
 					style={{
-						transform: [{ rotate: `${90 - smoothedAngle + angleOffset}deg` }]
+						transform: [{ rotate: `${90 - absoluteAngle}deg` }]
 					}}
 				>
 					<Polygon points="50,10 90,90 50,75 10,90" fill="white" />

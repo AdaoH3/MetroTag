@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, StyleSheet, View, Button, TextInput, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const host_url = `https://43ppk7jt-5000.use.devtunnels.ms/`;
+const host_url = `https://43ppk7jt-5000.use.devtunnels.ms`;
 
 const API_URL = host_url;
 
@@ -66,9 +66,10 @@ export default function HomeScreen() {
 	};
 
 	const handleRoleSelection = (role: string) => {
-		navigation.navigate(role === 'tagger' ? 'tagger' : 'runner', {
+		navigation.navigate(role === 'runner' ? 'runner' : 'tagger', {
 			name: name,
-			lobby: lobbyName
+			lobby: lobbyName,
+			role: role
 		});
 	};
 
