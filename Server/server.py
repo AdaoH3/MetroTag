@@ -22,7 +22,7 @@ class Player:
 class Game:
     def __init__(self, lobby_name):
         self.lobby_name = lobby_name
-        self.is_active = False
+        self.is_active = True
         self.players = []
 
 games = []
@@ -132,19 +132,6 @@ def join_game():
     
     return jsonify({"code": 0})  # Successfully joined
 
-@app.route('/start_game', methods=['POST'])
-def start_game():
-    global games
-    data = request.get_json()
-    index = verify_credentials_data(data)
-    
-    if index == -1:
-        return jsonify({"code": 7})
-    
-    games[index].is_active = True
-    
-    return jsonify({"code": 0})
-
 @app.route('/get_game_state', methods=['GET'])
 def get_gamestate():
     global games
@@ -184,18 +171,19 @@ def update_player_data():
     if index == -1:
         return jsonify({"code": 7})
     
-    if 'role' not in data or 'user_name' not in data or 'latitude' not in data or 'longitude' not in data or 'is_tagged' not in data:
-        return jsonify({"code": 7})
-    
     if not isinstance(data['user_name'], str) or not isinstance(data['latitude'], float) or not isinstance(data['longitude'], float) or not isinstance(data['is_tagged'], bool):
         return jsonify({"code": 7})
     
     for player in games[index].players:
         if player.user_name == data['user_name']:
-            player.role = data['role']
-            player.location.latitude = data['latitude']
-            player.location.longitude = data['longitude']
-            player.is_tagged = data['is_tagged']
+            if 'role' in data:
+                player.role = data['role']
+            if 'latitude' in data:
+                player.location.latitude = data['latitude']
+            if 'longitude' in data:
+                player.location.longitude = data['longitude']
+            if 'is_tagged' in data:
+                player.is_tagged = data['is_tagged']
             return jsonify({"code": 0})
 
     return jsonify({"code": 7})
