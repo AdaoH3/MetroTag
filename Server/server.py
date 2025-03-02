@@ -208,6 +208,20 @@ def get_center_coords():
 
     return jsonify({"code": 0, "center_coordinates":center})
 
+@app.route('/end_game', methods=['POST'])
+def end_game():
+    global games
+    data = request.get_json()
+    
+    index = verify_credentials_data(data)
+    
+    if index == -1:
+        return jsonify({"code": 7})
+    
+    games.pop(index)
+    
+    return jsonify({"code": 0})
+    
 if __name__ == '__main__':
     # Enable threaded mode to handle multiple requests concurrently
     app.run(debug=True, use_reloader=False, threaded=True)
