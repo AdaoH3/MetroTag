@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		marginTop: 20,
-		backgroundColor: '#fefefe',
-		color: '#1e1e1e'
+		backgroundColor: '#F55E02',
+		color: '#F55E02'
 	}
 });
