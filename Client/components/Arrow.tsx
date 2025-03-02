@@ -26,8 +26,8 @@ const Arrow: React.FC<ArrowProps> = ({ angleOffset = 0 }) => {
 				newAngle = newAngle < 0 ? newAngle + 360 : newAngle;
 
 				// Smooth transition and ensure absolute offset
-				setSmoothedAngle(prevAngle => 
-					alpha * newAngle + (1 - alpha) * prevAngle
+				setSmoothedAngle(
+					prevAngle => alpha * newAngle + (1 - alpha) * prevAngle
 				);
 			});
 		};

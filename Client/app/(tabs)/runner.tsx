@@ -5,7 +5,10 @@ import * as Location from 'expo-location';
 
 const host_url = `https://43ppk7jt-5000.use.devtunnels.ms`;
 
-type RunnerScreenRouteProp = RouteProp<{ params: { name: string; lobby?: string; role?: string } }, 'params'>;
+type RunnerScreenRouteProp = RouteProp<
+	{ params: { name: string; lobby?: string; role?: string } },
+	'params'
+>;
 
 export default function Runner() {
 	const route = useRoute<RunnerScreenRouteProp>();
@@ -16,7 +19,8 @@ export default function Runner() {
 	const lobby_name = route.params?.lobby || 'global';
 	const [role, setRole] = useState(route.params?.role || 'tagger');
 
-	const [location, setLocation] = useState<Location.LocationObjectCoords | null>(null);
+	const [location, setLocation] =
+		useState<Location.LocationObjectCoords | null>(null);
 	const [errorMsg, setErrorMsg] = useState<string | null>(null);
 	const [tagged, setTagged] = useState<boolean>(false);
 
@@ -24,7 +28,8 @@ export default function Runner() {
 		let interval: any;
 
 		const startTracking = async () => {
-			const { status } = await Location.requestForegroundPermissionsAsync();
+			const { status } =
+				await Location.requestForegroundPermissionsAsync();
 			if (status !== 'granted') {
 				setErrorMsg('Location tracking not allowed');
 				return;
@@ -69,7 +74,9 @@ export default function Runner() {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.text}>Welcome, {name}! You are a {role}.</Text>
+			<Text style={styles.text}>
+				Welcome, {name}! You are a {role}.
+			</Text>
 			{location ? (
 				<Text>
 					Lat: {location.latitude}, Lng: {location.longitude}
