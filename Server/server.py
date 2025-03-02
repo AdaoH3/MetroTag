@@ -227,6 +227,25 @@ def end_game():
     
     return jsonify({"code": 0})
     
+@app.route('/nearby_tagger', methods=['GET'])
+def nearby_tagger():
+    global games
+    lobby_name = request.args.get("lobby_name")
+
+    if not lobby_name:
+        return jsonify({"code": 9})
+
+    if not isinstance(lobby_name, str):
+        return jsonify({"code": 7})
+
+    for index, game in enumerate(games):
+        if game.lobby_name == ['lobby_name']:
+            game = games[index]
+    
+    tagger = find_nearest_player(identify_tagger(game.players), game.players)
+    returnCoords = [tagger.latitude, tagger.longitude]
+    return returnCoords
+    
 if __name__ == '__main__':
     # Enable threaded mode to handle multiple requests concurrently
     app.run(debug=True, use_reloader=False, threaded=True)
