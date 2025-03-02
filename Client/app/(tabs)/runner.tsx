@@ -96,5 +96,10 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 20,
 		color: '#fefefe'
+	},
+	button: {
+		marginTop: 20,
+		backgroundColor: '#F55E02',
+		color: '#F55E02'
 	}
 });

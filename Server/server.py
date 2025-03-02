@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from geopy.distance import geodesic  # For distance calculations
 from geopy import Point  # For working with coordinates
 from flask_cors import CORS  # Import CORS
+import logging
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -138,13 +139,14 @@ def get_gamestate():
     lobby_name = request.args.get("lobby_name")
 
     if not lobby_name:
+        return jsonify({"code": 9})
+
+    if not isinstance(lobby_name, str):
         return jsonify({"code": 7})
 
-    index = verify_credentials_arguments(lobby_name)
-    if index == -1:
-        return jsonify({"code": 7})
-
-    game = games[index]
+    for index, game in enumerate(games):
+        if game.lobby_name == data['lobby_name']:
+            game = games[index]
 
     game_state = {
         "code": 0,
@@ -208,6 +210,23 @@ def get_center_coords():
 
     return jsonify({"code": 0, "center_coordinates":center})
 
+@app.route('/end_game', methods=['POST'])
+def end_game():
+    global games
+    data = request.get_json()
+    
+    index = verify_credentials_data(data)
+    
+    if index == -1:
+        return jsonify({"code": 7})
+    
+    for player in games[index].players:
+        player.is_tagged = True
+    
+    games.pop(index)
+    
+    return jsonify({"code": 0})
+    
 if __name__ == '__main__':
     # Enable threaded mode to handle multiple requests concurrently
     app.run(debug=True, use_reloader=False, threaded=True)
