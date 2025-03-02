@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from geopy.distance import geodesic  # For distance calculations
 from geopy import Point  # For working with coordinates
 from flask_cors import CORS  # Import CORS
+import logging
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all domains
