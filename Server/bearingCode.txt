@@ -1,0 +1,34 @@
+function getAngleToTagger(clientLat, clientLon, otherLat, otherLon) {
+    // Convert degrees to radians
+    const lat1 = toRadians(clientLat);
+    const lat2 = toRadians(otherLat);
+    const lon1 = toRadians(clientLon);
+    const lon2 = toRadians(otherLon);
+
+    // Calculate x and y components (corrected)
+    const y = Math.sin(lon2 - lon1) * Math.cos(lat2);
+    const x = Math.cos(lat1) * Math.sin(lat2) - 
+              Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+
+    // Compute bearing and convert back to degrees
+    const angle = toDegrees(Math.atan2(y, x));
+
+    // Normalize angle to 0-360 degrees
+    return (angle + 360) % 360;
+}
+
+// Utility functions
+function toRadians(degrees) {
+    return degrees * Math.PI / 180;
+}
+
+function toDegrees(radians) {
+    return radians * 180 / Math.PI;
+}
+
+// Example usage (fixed variable names)
+const clientCoords = { lat: 37.7749, lon: -122.4194 }; // Player's current location
+const otherCoords = { lat: 34.0522, lon: -118.2437 }; // Tagger's received location
+
+const angleToTagger = getAngleToTagger(clientCoords.lat, clientCoords.lon, otherCoords.lat, otherCoords.lon);
+console.log(`Angle to tagger: ${angleToTagger.toFixed(2)}°`);

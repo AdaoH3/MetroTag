@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaflet Map with Multiple Players</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Leaflet Map with Multiple Players</h2>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      // Fetch the center coordinates first to initialize the map
+      fetch("http://127.0.0.1:5000/get_center_coords?lobby_name=exampleLobby")
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.code === 0 && data.center_coordinates) {
+            const center = data.center_coordinates;
+            // Initialize the map with the center coordinates and zoom level
+            var map = L.map("map").setView(center, 13); // Zoomed out to fit multiple markers
+
+            // Add OpenStreetMap tiles
+            L.tileLayer(`https://tile.openstreetmap.org/{z}/{x}/{y}.png`, {
+              attribution: "© OpenStreetMap contributors",
+            }).addTo(map);
+
+            // Add a red circle around the center (as an example)
+            L.circle(center, {
+              color: "#d30000",
+              fillColor: "#FF0909",
+              fillOpacity: 0.5,
+              radius: 5000, // Example radius, adjust as needed
+            })
+              .addTo(map)
+              .bindPopup("This is a red circle around the center!");
+
+            // Now fetch the game state
+            fetch(
+              "http://127.0.0.1:5000/get_game_state?lobby_name=exampleLobby",
+              {
+                method: "GET",
+              },
+            )
+              .then((response) => response.json())
+              .then((game_state) => {
+                // Check if game is active before proceeding
+                if (game_state.game_status) {
+                  // Loop through the players in game_state and add markers
+                  for (var player in game_state.players) {
+                    var playerData = game_state.players[player];
+
+                    var markerColor =
+                      playerData.role === "tagger" ? "#F55E02" : "#202B2B"; // Red for Tagger, Blue for others
+
+                    // Create the marker with the determined color
+                    var marker = L.marker(playerData.location, {
+                      icon: L.divIcon({
+                        className: "custom-circle-icon",
+                        html: `
+                                                <div style="position: relative; width: 20px; height: 20px;">
+                                                    <!-- Circle -->
+                                                    <div style="width: 20px; height: 20px; background-color: ${markerColor}; border-radius: 50%; border: 3px solid white;"></div>
+                                                </div>`,
+                        iconSize: [20, 20], // Size of the icon (adjust to fit both)
+                      }),
+                    }).addTo(map);
+
+                    // Show the popup on hover
+                    marker.on("mouseover", function (e) {
+                      this.bindPopup(player).openPopup();
+                    });
+
+                    // Hide the popup when mouse leaves
+                    marker.on("mouseout", function (e) {
+                      this.closePopup();
+                    });
+                  }
+                }
+              })
+              .catch((error) =>
+                console.log("Error fetching game state:", error),
+              );
+          } else {
+            console.log("Error fetching center coordinates:", data.message);
+          }
+        })
+        .catch((error) =>
+          console.log("Error fetching center coordinates:", error),
+        );
+    </script>
+    <h4>This map displays all players</h4>
+  </body>
+</html>
