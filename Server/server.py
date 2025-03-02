@@ -144,9 +144,14 @@ def get_gamestate():
     if not isinstance(lobby_name, str):
         return jsonify({"code": 7})
 
-    for index, game in enumerate(games):
-        if game.lobby_name == data['lobby_name']:
-            game = games[index]
+    game = None
+    for g in games:
+        if g.lobby_name == lobby_name:
+            game = g
+            break
+
+    if not game:
+        return jsonify({"code": 7})  # Lobby not found
 
     game_state = {
         "code": 0,
@@ -226,7 +231,7 @@ def end_game():
     games.pop(index)
     
     return jsonify({"code": 0})
-    
+
 @app.route('/nearby_tagger', methods=['GET'])
 def nearby_tagger():
     global games
@@ -238,14 +243,27 @@ def nearby_tagger():
     if not isinstance(lobby_name, str):
         return jsonify({"code": 7})
 
-    for index, game in enumerate(games):
-        if game.lobby_name == ['lobby_name']:
-            game = games[index]
-    
-    tagger = find_nearest_player(identify_tagger(game.players), game.players)
-    returnCoords = [tagger.latitude, tagger.longitude]
-    return returnCoords
-    
+    game = None
+    for g in games:
+        if g.lobby_name == lobby_name:
+            game = g
+            break
+
+    if not game:
+        return jsonify({"code": 7})  # Lobby not found
+
+    tagger = identify_tagger(game.players)
+    if not tagger:
+        return jsonify({"code": 10, "message": "No tagger found"})
+
+    nearest_player = find_nearest_player(tagger, game.players)
+    if not nearest_player:
+        return jsonify({"code": 11, "message": "No nearby players"})
+
+    return jsonify({
+        "code": 0,
+        "nearest_player_location": [nearest_player.location.latitude, nearest_player.location.longitude]
+    })
 if __name__ == '__main__':
     # Enable threaded mode to handle multiple requests concurrently
     app.run(debug=True, use_reloader=False, threaded=True)
