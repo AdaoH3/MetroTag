@@ -1,7 +1,15 @@
-# MetroTag
+# MetroTag  
 
-## MetroTag App Explained
-MetroTag is essentially a real-world game of tag using GPS locations. Players can be either taggers (who chase) or runners (who flee), and they use their mobile devices to track each other's positions.
+This project was done at the MIT Blueprint 2025 Hackathon  
+Credits:   
+Crllct: Frontend (UI + Angle and arrow complications + backend communications),   
+Adao: Helped backend and frontend (Setup some flask functions, implementing bearing calculation, and developed backend logic flowchart),   
+Artificer: Tweaked around with different backend + implemented flask functions,  
+RamK: Implemented LeafletJS for map and created presentation  
+
+## Explanation:  
+MetroTag is a real-world game of tag using GPS locations. Players can be either taggers (who chase) or runners (who flee), and they use their mobile devices to track each other's positions.
+
 ----
 <img width="518" height="434" alt="image" src="https://github.com/user-attachments/assets/d3a0bbd4-2105-4657-adf0-bd6915cc6dc6" />
 
